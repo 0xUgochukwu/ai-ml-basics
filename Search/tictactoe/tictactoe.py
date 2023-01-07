@@ -25,15 +25,18 @@ def player(board):
     if terminal(board):
         return None
     
-    x_count = 0
-    o_count = 0
-
-    for row in board:
-        for cell in row:
-            if cell == X:
-                x_count += 1
-            elif cell == O:
-                o_count += 1
+    count = 0
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] != EMPTY:
+                count += 1
+    
+    if board == initial_state():
+        return X
+    if count % 2 == 1:
+        return O
+    else:
+        return X
 
 
 def actions(board):
@@ -57,21 +60,15 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    # boardCopy = copy.deepcopy(board)
-
-    # if boardCopy[action[0]][action[1]] != EMPTY:
-    #     boardCopy[action[0]][action[1]] = player(board)
-    #     return boardCopy
-    # else:
-    #     raise Exception("Action is Not possible")
+    
 
     if action not in actions(board):
-        raise Exception("Invalid action")
+        raise Exception("Invalid Action!!!")
 
-    new_board = [row[:] for row in board]
-    new_board[action[0]][action[1]] = player(board)
-
-    return new_board
+    b2 = copy.deepcopy(board)
+    b2[action[0]][action[1]] = player(board)
+    
+    return b2
 
 
 def winner(board):
@@ -130,9 +127,12 @@ def max_value(board):
 
     for action in actions(board):
         min_v = min_value(result(board, action))[0]
+        # Max = max(Max, min_v)
         if  min_v > v:
             v = min_v
             best_action = action
+        # if Max >= Min:
+        #     break
 
     return [v, best_action]
 
@@ -146,7 +146,7 @@ def min_value(board):
 
     for action in actions(board):
         max_v = max_value(result(board, action))[0]
-        if  max_v > v:
+        if  max_v < v:
             v = max_v
             best_action = action
 
@@ -160,9 +160,9 @@ def minimax(board):
     if terminal(board):
         return None
 
-    current_player = player(board)
 
-    if current_player == X:
+    Max, Min = math.inf, -math.inf
+    if player(board) == X:
         return max_value(board)[1]
     
     return min_value(board)[1]
