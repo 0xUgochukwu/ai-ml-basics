@@ -118,7 +118,7 @@ def utility(board):
     else:
         return 0
 
-def max_value(board):
+def max_value(board, Max, Min):
     if terminal(board):
         return [utility(board), None]
     
@@ -126,17 +126,17 @@ def max_value(board):
     best_action = None
 
     for action in actions(board):
-        min_v = min_value(result(board, action))[0]
-        # Max = max(Max, min_v)
+        min_v = min_value(result(board, action), Max, Min)[0]
+        Max = max(Max, min_v)
         if  min_v > v:
             v = min_v
             best_action = action
-        # if Max >= Min:
-        #     break
+        if Max >= Min:
+            break
 
     return [v, best_action]
 
-def min_value(board):
+def min_value(board, Max, Min):
 
     if terminal(board):
         return [utility(board), None]
@@ -145,10 +145,13 @@ def min_value(board):
     best_action = None
 
     for action in actions(board):
-        max_v = max_value(result(board, action))[0]
+        max_v = max_value(result(board, action), Max, Min)[0]
+        Min = min(Min, max_v)
         if  max_v < v:
             v = max_v
             best_action = action
+        if Max >= Min:
+            break
 
     return [v, best_action]
 
@@ -161,10 +164,10 @@ def minimax(board):
         return None
 
 
-    Max, Min = math.inf, -math.inf
+    Max, Min = -math.inf, math.inf
     if player(board) == X:
-        return max_value(board)[1]
+        return max_value(board, Max, Min)[1]
     
-    return min_value(board)[1]
+    return min_value(board, Max, Min)[1]
     
 
