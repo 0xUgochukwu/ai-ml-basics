@@ -150,7 +150,7 @@ def min_value(board, Max, Min):
         if  max_v < v:
             v = max_v
             best_action = action
-        if Max >= Min:
+        if Min <= Max:
             break
 
     return [v, best_action]
