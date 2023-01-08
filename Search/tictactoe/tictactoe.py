@@ -25,15 +25,17 @@ def player(board):
     if terminal(board):
         return None
     
-    count = 0
-    for i in range(3):
-        for j in range(3):
-            if board[i][j] != EMPTY:
-                count += 1
-    
-    if board == initial_state():
-        return X
-    if count % 2 == 1:
+    x_count = 0
+    o_count = 0
+
+    for row in board:
+        for cell in row:
+            if cell == X:
+                x_count += 1
+            elif cell == O:
+                o_count += 1
+
+    if x_count > o_count:
         return O
     else:
         return X
