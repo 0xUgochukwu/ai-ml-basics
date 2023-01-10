@@ -77,14 +77,17 @@ def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
+    # Check Vertical
     for i in range(3):
         if board[i][0] == board[i][1] == board[i][2] != EMPTY:
             return board[i][0]
 
+    # Check Horizontal
     for i in range(3):
         if board[0][i] == board[1][i] == board[2][i] != EMPTY:
             return board[0][i]
 
+    # Check Diagonal
     if board[0][0] == board[1][1] == board[2][2] != EMPTY:
         return board[0][0]
 
